@@ -1,0 +1,36 @@
+* {
+	border: 0 none;
+	outline: 0;
+	padding: 0;
+	margin: 0;
+	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+div#menu {
+	margin-bottom: 10px;
+}
+
+div#menu td {
+	background-color: #BBB;
+}
+
+tr {
+	margin: 0;
+	padding: 0;
+}
+
+td {
+	text-align: center;
+	font-size: 20px;
+	background-color: #dedede;
+	width: 40px;
+	height: 40px;
+}
+
+.G { background-color: #CCFF33; }
+
+.B { background-color: #44DD44; }
+
+.T { background-color: #119911; }
+
+.H { background-color: #885500; }

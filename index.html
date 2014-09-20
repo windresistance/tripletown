@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<script type="text/javascript" src='http://code.jquery.com/jquery-1.10.2.min.js'></script>
+		<link rel="stylesheet" href="styles.css" type="text/css">
+		<script type="text/javascript">
+			
+			$(document).ready(function(){
+				object = getItem();
+				$("div#menu td").html(object);
+				
+				$("div#board td").click(function() {
+					// check neighbors
+					var thisid = this.id;
+					
+					checkNeighbors(thisid);
+					$("div#board td#" + thisid).html(object);  // print object onto cell
+					// $("div#board td#" + thisid).css({'background-color': '#00FF00;'});
+					$("div#board td#" + thisid).addClass(object);
+					
+					var xCoord = thisid.charAt(0);
+					var yCoord = thisid.charAt(1);
+					
+					$("div#menu td").html(getItem());  // get new item
+				});
+				
+			});
+			
+			function createPlot(x, y) {
+				this.xCoord = x;
+				this.yCoord = y;
+				this.object = getItem();
+			}
+			
+			function getItem() {
+				var randomNumber = Math.round(Math.random() * 100);
+				
+				if (randomNumber >= 0 && randomNumber <= 70) {
+					object = "G";
+				} else if (randomNumber > 70 && randomNumber <= 93) {
+					object = "B";
+				} else if (randomNumber > 93 && randomNumber <= 98) {
+					object = "T";
+				} else if (randomNumber > 98 && randomNumber <= 100) {
+					object = "H";
+				}
+				
+				return object;
+			}
+			
+			function checkNeighbors(thisis) {
+				thisis = parseInt(thisis);  // convert to number
+				var northNeighbor = thisis - 1;
+				var eastNeighbor = thisis + 10;
+				var southNeighbor = thisis + 1;
+				var westNeighbor = thisis - 10;
+				
+				// $("div#board td#" + northNeighbor).css({'background-color': '#BFB'});
+				// $("div#board td#" + eastNeighbor).css({'background-color': '#BFB'});
+				// $("div#board td#" + southNeighbor).css({'background-color': '#BFB'});
+				// $("div#board td#" + westNeighbor).css({'background-color': '#BFB'});
+			}
+			
+		</script>
+	</head>
+	<body>
+		<div id="menu">
+			<table>
+				<tr>
+					<td></td>
+				</tr>
+			</table>
+		</div>
+		<div id="board">
+			<table>
+				<tr>
+					<td id="11"></td>
+					<td id="21"></td>
+					<td id="31"></td>
+					<td id="41"></td>
+					<td id="51"></td>
+					<td id="61"></td>
+				</tr>
+				<tr>
+					<td id="12"></td>
+					<td id="22"></td>
+					<td id="32"></td>
+					<td id="42"></td>
+					<td id="52"></td>
+					<td id="62"></td>
+				</tr>
+				<tr>
+					<td id="13"></td>
+					<td id="23"></td>
+					<td id="33"></td>
+					<td id="43"></td>
+					<td id="53"></td>
+					<td id="63"></td>
+				</tr>
+				<tr>
+					<td id="14"></td>
+					<td id="24"></td>
+					<td id="34"></td>
+					<td id="44"></td>
+					<td id="54"></td>
+					<td id="64"></td>
+				</tr>
+				<tr>
+					<td id="15"></td>
+					<td id="25"></td>
+					<td id="35"></td>
+					<td id="45"></td>
+					<td id="55"></td>
+					<td id="65"></td>
+				</tr>
+					<td id="16"></td>
+					<td id="26"></td>
+					<td id="36"></td>
+					<td id="46"></td>
+					<td id="56"></td>
+					<td id="66"></td>
+				</tr>
+			</table>
+		</div>
+		<div id="board2">
+			<table>
+			</table>
+		</div>
+	</body>
+</html>
