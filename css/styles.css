@@ -1,0 +1,10 @@
+
+
+svg {
+	//width: 800px;
+	//height: 800px;
+}
+
+svg rect.square{
+	fill: steelblue;
+}
