@@ -76,7 +76,7 @@ $(document).ready(function(){
 
 // NICK ADDED THIS HAHAHA!!!
 // changed below
-function blahFunc() {
+function blah__Func() {
 	var item = '';
 	var rand = Math.round(Math.random() * 100);
 	
