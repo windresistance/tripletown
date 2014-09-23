@@ -34,7 +34,7 @@ var createGrid = function(grid){
 			//finding the x and y coordinates
 			var x = j*(grid.width + grid.spacing);
 			var y = i*(grid.height + grid.spacing);
-
+			
 			var new_rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
 
 			var attrs = {"x":x, "y":y , "height": grid.width, "width": grid.width, "class":"square" , "column": j, "row": i}
@@ -52,13 +52,13 @@ var createGrid = function(grid){
 //initialize the visualization
 $(document).ready(function(){
 	var grid = new Grid; 
-
+	
 	//Setup svg
 	setupSVG(grid);
-
+	
 	//Call function to setup grid
 	createGrid(grid);
-
+	
 	//Get first item
 	$('#nextItem').html(getItem());
 	
@@ -75,7 +75,8 @@ $(document).ready(function(){
 })
 
 // NICK ADDED THIS HAHAHA!!!
-function getItem() {
+// changed below
+function blahFunc() {
 	var item = '';
 	var rand = Math.round(Math.random() * 100);
 	
