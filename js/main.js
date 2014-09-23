@@ -71,6 +71,7 @@ $(document).ready(function(){
 	})
 })
 
+// NICK ADDED THIS HAHAHA!!!
 function getItem() {
 	var item = '';
 	var rand = Math.round(Math.random() * 100);
