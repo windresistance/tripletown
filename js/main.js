@@ -11,6 +11,9 @@ var Grid = function(){
 	};	
 }
 
+
+//SUSIE IS MAKING CHANGES TO TEST OUT GIT
+
 //Scales the SVG based on the number of columns and rows
 var setupSVG = function(grid){
 	var w = grid.columns*grid.width + (grid.columns -1)*grid.spacing;
