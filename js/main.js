@@ -22,7 +22,7 @@ var Grid = function(){
 
 //Scales the SVG based on the number of columns and rows
 var setupSVG = function(grid){
-	var w = grid.columns*grid.width + (grid.columns -1)*grid.spacing + 100 + grid.margin.left + grid.margin.right;
+	var w = grid.columns*grid.width + (grid.columns -1)*grid.spacing + 200 + grid.margin.left + grid.margin.right;
 	var h = grid.rows*grid.height + (grid.rows - 1)*grid.spacing + grid.margin.top + grid.margin.bottom;
 
 	$("svg#game").attr("width", w);
@@ -34,12 +34,16 @@ var createGrid = function(grid){
 
 	var gridEl = $("#grid")
 
-	var gridGroup = document.createElementNS("http://www.w3.org/2000/svg", "g"); 
+	var gridGroup = createSVGEl("g"); 
 
-	gridGroup.setAttribute("id", "grid");
-	gridGroup.setAttribute("transform", "translate(" + grid.margin.left + ", " + grid.margin.top + ")")
+	var gridAttrs = {
+		"id": "grid",
+		"transform": "translate(" + grid.margin.left + ", " + grid.margin.top + ")"
+	}
 
-	document.getElementById("game").appendChild(gridGroup)
+	setAttributes(gridGroup, gridAttrs)
+
+	addToSVG("game", gridGroup);
 
 	for (var i =0; i < grid.rows; i++){
 		for (var j=0; j < grid.columns; j++){
@@ -52,11 +56,9 @@ var createGrid = function(grid){
 
 			var attrs = {"x":x, "y":y , "height": grid.width, "width": grid.width, "class":"square" , "column": j, "row": i}
 
-			for (var k in attrs){
-				new_rect.setAttribute(k, attrs[k]);
-			}
+			setAttributes(new_rect, attrs)
 
-			addToSVG("game", new_rect)
+			addToSVG("grid", new_rect)
 
 		}
 	}
@@ -70,11 +72,43 @@ var createItemPanel = function(grid){
 
 	var panelGroup = createSVGEl("g");
 
-	panelGroup.setAttribute("id", "panel");
-	panelGroup.setAttribute("transform", "translate(" + (x + grid.margin.left) + ", " + (y + grid.margin.top) + ")")
+	var panelGroupAttrs = {
+		"id": "panel",
+		"transform": "translate(" + (x + grid.margin.left) + ", " + (y + grid.margin.top) + ")"
+	}
+
+	setAttributes(panelGroup, panelGroupAttrs);
 
 	addToSVG("game", panelGroup)
 
+
+	var panelTitle = createSVGEl("text");
+
+	var panelTitleAttrs = {
+		x: 0,
+		y: 18
+	}
+
+	$(panelTitle).text("Next item");
+
+	setAttributes(panelTitle, panelTitleAttrs)
+
+	addToSVG("panel", panelTitle)
+
+	var newItem = createSVGEl("rect");
+
+	var newItemAttrs = {
+		x: 0,
+		y: 40,
+		"id": "newItem",
+		width: grid.width,
+		height: grid.height,
+		"class": getItem()
+	}
+
+	setAttributes(newItem, newItemAttrs);
+
+	addToSVG("panel", newItem)
 
 }
 
@@ -84,6 +118,12 @@ var createSVGEl = function(type){
 
 var addToSVG = function(id, element){
 	document.getElementById(id).appendChild(element);
+}
+
+var setAttributes = function(element, attrs){
+	for (var k in attrs){
+		element.setAttribute(k, attrs[k]);
+	}
 }
 
 //initialize the visualization

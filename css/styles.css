@@ -1,3 +1,24 @@
-svg rect.square{
+svg text {
+	font-family: 'Montserrat', sans-serif;
+	font-size: 18px;
+}
+
+svg rect{
 	fill: #F2F2F2;
+}
+
+svg rect.grass{
+	fill: rgb(107, 201, 34);
+}
+
+svg rect.bush{
+	fill:rgb(39, 88, 19);
+}
+
+svg rect.tree{
+	fill: rgb(172, 105, 20);
+}
+
+svg rect.hut{
+	fill:rgb(228, 185, 131);
 }
