@@ -3,17 +3,17 @@
 var Grid = function(){
 	
 	return {
-	rows: 6,
-	columns: 6,
-	width: 60,
-	height: 60,
-	spacing: 10,
-	margin: {
-		top: 50,
-		right: 0,
-		bottom: 50,
-		left: 50
-	}
+		rows: 6,
+		columns: 6,
+		width: 60,
+		height: 60,
+		spacing: 10,
+		margin: {
+			top: 50,
+			right: 0,
+			bottom: 50,
+			left: 50
+		}
 	};	
 }
 
@@ -51,7 +51,7 @@ var createGrid = function(grid){
 			
 			var new_rect = createSVGEl("rect");
 
-			var attrs = {"x":x, "y":y , "height": grid.width, "width": grid.width, "class":"square" , "column": j, "row": i}
+			var attrs = {"x":x, "y":y , "height": grid.width, "width": grid.width, "class":"empty" , "column": j, "row": i}
 
 			setAttributes(new_rect, attrs)
 
@@ -189,18 +189,29 @@ $(document).ready(function(){
 
 	createItemPanel(grid);
 	
-	//Get first item
-	$('#nextItem').html(getItem());
-	
-	
+	// on click event
 	$('rect').click(function(event){
-		$('#nextItem').html(getItem());
-		console.log(
-			this.getAttribute('row'),
-			this.getAttribute('column')
-			// event.currentTarget.attributes.row.value, 
-			// event.currentTarget.attributes.column.value
-		);
+		var col = this.getAttribute('column');
+		var row = this.getAttribute('row');
+		
+		var clickedBox = $("svg rect[column=" + col + "][row=" + row +"]");
+		
+		if (clickedBox.attr("class") === "empty") {
+			
+			// place item
+			$('rect').animate({borderWidth:"2px"});
+			
+			clickedBox.attr("class", $('#newItem').attr('class'));
+			
+			// check neighbors...
+			
+			
+			// get next item
+			$('#newItem').attr('class',getItem());
+		}
+			
+		
+		
 	})
 })
 
