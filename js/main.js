@@ -3,8 +3,8 @@
 var Grid = function(){
 	
 	return {
-	rows: 10,
-	columns: 10,
+	rows: 6,
+	columns: 6,
 	width: 60,
 	height: 60,
 	spacing: 10,
@@ -16,9 +16,6 @@ var Grid = function(){
 	}
 	};	
 }
-
-
-//SUSIE IS MAKING CHANGES TO TEST OUT GIT
 
 //Scales the SVG based on the number of columns and rows
 var setupSVG = function(grid){
@@ -61,6 +58,58 @@ var createGrid = function(grid){
 			addToSVG("grid", new_rect)
 
 		}
+	}
+}
+
+var getItem = function() {
+	var item = '';
+	var rand = Math.round(Math.random() * 100);
+	
+	if (rand >= 0 && rand <= 70) {
+		item = "grass";
+	} else if (rand > 70 && rand <= 94) {
+		item = "bush";
+	} else if (rand > 94 && rand <= 99) {
+		item = "tree";
+	} else if (rand > 99 && rand <= 100) {
+		item = "hut";
+	}
+	
+	return item;
+}
+
+function randBetween(beg,end) {
+	var num;	// declare number to return
+	
+	// generate random number
+	if (typeof(beg) == "number" && typeof(end) == "number") {
+		num = Math.random()*(end-beg) + beg;
+	} else if (typeof(beg) == "number") {
+		num = Math.random()*beg;
+	} else {
+		num = Math.random();
+	}
+
+	return num;
+	
+}	// end function
+
+
+var addInitialItems = function(grid){
+
+	var boxes = grid.rows*grid.columns;
+	var lowerBound = Math.floor(boxes*.25);
+	var upperBound = Math.floor(boxes*.5);
+
+	var randItems = Math.round(randBetween(lowerBound, upperBound));
+
+	//iterate through item numbers to add
+	//initial items
+	for (var i=0; i < randItems; i++){
+		var x = Math.round(randBetween(0, grid.columns));
+		var y = Math.round(randBetween(0, grid.rows));
+
+		$("svg rect[column=" + x + "][row=" + y +"]").attr("class", getItem());
 	}
 }
 
@@ -136,6 +185,8 @@ $(document).ready(function(){
 	//Call function to setup grid
 	createGrid(grid);
 
+	addInitialItems(grid);
+
 	createItemPanel(grid);
 	
 	//Get first item
@@ -153,20 +204,6 @@ $(document).ready(function(){
 	})
 })
 
-// NICK ADDED THIS HAHAHA!!!
-function getItem() {
-	var item = '';
-	var rand = Math.round(Math.random() * 100);
-	
-	if (rand >= 0 && rand <= 70) {
-		item = "grass";
-	} else if (rand > 70 && rand <= 94) {
-		item = "bush";
-	} else if (rand > 94 && rand <= 99) {
-		item = "tree";
-	} else if (rand > 99 && rand <= 100) {
-		item = "hut";
-	}
-	
-	return item;
-}
+
+
+
