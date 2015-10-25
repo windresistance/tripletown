@@ -1,6 +1,10 @@
-svg text {
+svg text, #gameOver  {
 	font-family: 'Montserrat', sans-serif;
 	font-size: 18px;
+}
+
+#gameOver {
+	margin-left: 50px;
 }
 
 svg rect{
