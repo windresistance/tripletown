@@ -28,38 +28,28 @@ var setupSVG = function(grid){
 
 //Adds squares to svg to create a grid;
 var createGrid = function(grid){
-
 	var gridEl = $("#grid")
-
 	var gridGroup = createSVGEl("g"); 
-
 	var gridAttrs = {
 		"id": "grid",
 		"transform": "translate(" + grid.margin.left + ", " + grid.margin.top + ")"
 	}
 
 	setAttributes(gridGroup, gridAttrs)
-
 	addToSVG("game", gridGroup);
 
 	for (var i =0; i < grid.rows; i++){
 		for (var j=0; j < grid.cols; j++){
-
 			//finding the x and y coordinates
 			var x = j*(grid.width + grid.spacing);
 			var y = i*(grid.height + grid.spacing);
-			
 			var new_rect = createSVGEl("rect");
-
 			var attrs = {"x":x, "y":y , "height": grid.width, "width": grid.width, "class":"empty" , "col": j, "row": i}
 
 			setAttributes(new_rect, attrs)
-
 			addToSVG("grid", new_rect)
-
 		}
 	}
-
 	addInitialItems(grid);
 }
 
@@ -93,20 +83,17 @@ function randBetween(beg,end) {
 	}
 
 	return num;
-	
 }	// end function
 
 
 var addInitialItems = function(grid){
-
 	var boxes = grid.rows*grid.cols;
 	var lowerBound = Math.floor(boxes*.25);
 	var upperBound = Math.floor(boxes*.5);
-
 	var randItems = Math.round(randBetween(lowerBound, upperBound));
 
-	//iterate through item numbers to add
-	//initial items
+	// iterate through item numbers to add
+	// initial items
 	for (var i=0; i < randItems; i++){
 		var x = Math.round(randBetween(0, grid.cols));
 		var y = Math.round(randBetween(0, grid.rows));
@@ -116,25 +103,18 @@ var addInitialItems = function(grid){
 }
 
 var createItemPanel = function(grid){
-
 	var x = grid.cols*grid.width + (grid.cols -1)*grid.spacing + 30;
-
 	var y = 0;
-
 	var panelGroup = createSVGEl("g");
-
 	var panelGroupAttrs = {
 		"id": "panel",
 		"transform": "translate(" + (x + grid.margin.left) + ", " + (y + grid.margin.top) + ")"
 	}
 
 	setAttributes(panelGroup, panelGroupAttrs);
-
 	addToSVG("game", panelGroup)
 
-
 	var panelTitle = createSVGEl("text");
-
 	var panelTitleAttrs = {
 		x: 0,
 		y: 18
@@ -143,11 +123,9 @@ var createItemPanel = function(grid){
 	$(panelTitle).text("Next item");
 
 	setAttributes(panelTitle, panelTitleAttrs)
-
 	addToSVG("panel", panelTitle)
 
 	var newItem = createSVGEl("rect");
-
 	var newItemAttrs = {
 		x: 0,
 		y: 40,
@@ -158,9 +136,7 @@ var createItemPanel = function(grid){
 	}
 
 	setAttributes(newItem, newItemAttrs);
-
 	addToSVG("panel", newItem)
-
 }
 
 var createSVGEl = function(type){
@@ -178,15 +154,12 @@ var setAttributes = function(element, attrs){
 }
 
 var floodFill = function(node, replace_class, matches, checked) {
-
-	var col = parseInt(node.attr('col'));
-	var row = parseInt(node.attr('row'));
-	var key = row+"-"+col;
+	var col = parseInt(node.attr('col')),
+		row = parseInt(node.attr('row')),
+		key = row+"-"+col;
 
 	// if node has already been checked, exit
-	if (checked.indexOf(key) >= 0) {
-		return;
-	}
+	if (checked.indexOf(key) >= 0) return;
 
 	// push checked node onto checked array
 	checked.push(key);
@@ -198,10 +171,11 @@ var floodFill = function(node, replace_class, matches, checked) {
 		return;
 	}
 
-	floodFill($("svg rect[col=" + col + "][row=" + (row-1) +"]"), replace_class, matches, checked);  // N
-	floodFill($("svg rect[col=" + col + "][row=" + (row+1) +"]"), replace_class, matches, checked);  // S
-	floodFill($("svg rect[col=" + (col-1) + "][row=" + row +"]"), replace_class, matches, checked);  // E
-	floodFill($("svg rect[col=" + (col+1) + "][row=" + row +"]"), replace_class, matches, checked);  // W
+	// check neighbors
+	floodFill($("svg rect[col="+col+"][row="+(row-1)+"]"), replace_class, matches, checked);  // N
+	floodFill($("svg rect[col="+col+"][row="+(row+1)+"]"), replace_class, matches, checked);  // S
+	floodFill($("svg rect[col="+(col-1)+"][row="+row+"]"), replace_class, matches, checked);  // E
+	floodFill($("svg rect[col="+(col+1)+"][row="+row+"]"), replace_class, matches, checked);  // W
 
 	return;
 }
@@ -210,30 +184,24 @@ var checkGameOver = function() {
 	return ($("svg rect.empty").length == 0);
 }
 
-var growItem = function(clickedBox, item){
-	console.log('growItem','\nclickedBox:',clickedBox,'\nitem:',item);
-	var newClass = item.attr('class');
-	var matches = [];
-	var checked = [];
+var growItem = function(clickedBox, newClass){
+	var	matches = [], checked = [];
 
-	item.attr('class', newClass);  // set clicked box to new item
+	clickedBox.attr('class', newClass);  // set clicked box to new item
 
-	floodFill($(item), newClass, matches, checked);
-
-	console.log(matches);
+	floodFill(clickedBox, newClass, matches, checked);
 
 	if (matches.length >= 3) {
 		matches.forEach(function(match){
 			match.attr('class','empty');
 		})
-		var nextClass = items.indexOf(item.attr('class')) + 1;
+		var nextClass = items.indexOf(newClass) + 1;
 		clickedBox.attr('class', items[nextClass]);
-
-		growItem(item, clickedBox, items[nextClass])
+		growItem(clickedBox, items[nextClass]);
 	}
 }
 
-//initialize the visualization
+// initialize the game
 $(document).ready(function(){
 	var grid = new Grid;
 	setupSVG(grid);
@@ -242,32 +210,13 @@ $(document).ready(function(){
 
 	// on click event
 	$('rect').click(function(event){
-		var newItem = $('#newItem');  // get new item
-		var col = parseInt($(this).attr('col'));
-		var row = parseInt($(this).attr('row'));
-		
-		//var clickedBox = $("svg rect[col=" + col + "][row=" + row +"]");
+		var newItem = $('#newItem'),
+			col = parseInt($(this).attr('col')),
+			row = parseInt($(this).attr('row'));
 		
 		if ($(this).attr("class") === "empty") {
-			// check neighbors
-			growItem($(this), newItem);
-			// var checked = [];
-
-			// $(this).attr('class',newItem.attr('class'));  // set clicked box to new item
-
-			// floodFill($(this), newItem.attr('class'), matches, checked);
-
-			// if (matches.length >= 3) {
-			// 	matches.forEach(function(match){
-			// 		match.attr('class','empty');
-			// 	})
-			// 	var newClass = items.indexOf(newItem.attr('class')) + 1;
-			// 	clickedBox.attr('class',items[newClass]);
-			// }
-
-			// place newItem
-			// $('rect').animate({borderWidth:"2px"});
-			// clickedBox.attr("class", newItem.attr('class'));
+			// check neighbors to see if the item can grow to the next item
+			growItem($(this), newItem.attr('class'));
 
 			// get next newItem
 			newItem.attr('class',getItem());
