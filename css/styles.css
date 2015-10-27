@@ -7,22 +7,20 @@ svg text, #gameOver  {
 	margin-left: 50px;
 }
 
-svg rect{
-	fill: #F2F2F2;
-}
+/*svg rect{ fill: #F2F2F2; }*/
 
-svg rect.grass{
-	fill: rgb(107, 201, 34);
-}
+/*svg rect.grass{ fill: rgb(107, 201, 34); }
+svg rect.bush{ fill: rgb(39, 88, 19); }
+svg rect.tree{ fill: rgb(172, 105, 20); }
+svg rect.hut{ fill: rgb(228, 185, 131); }
+svg rect.house{ fill: rgb(255, 133, 0); }
+svg rect.bighouse{ fill: rgb(255, 67, 0); }
+svg rect.castle{ fill: rgb(175, 0, 0); }*/
 
-svg rect.bush{
-	fill:rgb(39, 88, 19);
-}
-
-svg rect.tree{
-	fill: rgb(172, 105, 20);
-}
-
-svg rect.hut{
-	fill:rgb(228, 185, 131);
-}
+/*svg rect.grass { fill: url(img.jpg) 0 0; }
+svg rect.bush { fill: url(img.jpg) 0 0; }
+svg rect.tree { fill: url(img.jpg) 0 0; }
+svg rect.hut { fill: url(img.jpg) 0 0; }
+svg rect.house { fill: url(img.jpg) 0 0; }
+svg rect.bighouse { fill: url(img.jpg) 0 0; }
+svg rect.castle { fill: url(img.jpg) 0 0; }*/

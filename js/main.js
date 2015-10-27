@@ -1,4 +1,5 @@
 var items = ["grass", "bush", "tree", "hut", "house", "bighouse", "castle"];
+var points = {"grass":1, "bush":3, "tree":9, "hut":27, "house":81, "bighouse":243, "castle":729};
 
 //Sets up properties for the grid
 var Grid = function(){
@@ -7,7 +8,7 @@ var Grid = function(){
 		cols: 6,
 		width: 60,
 		height: 60,
-		spacing: 10,
+		spacing: 1,
 		margin: {
 			top: 50,
 			right: 0,
@@ -28,7 +29,7 @@ var setupSVG = function(grid){
 
 //Adds squares to svg to create a grid;
 var createGrid = function(grid){
-	var gridEl = $("#grid")
+	var gridEl = $("#grid");
 	var gridGroup = createSVGEl("g"); 
 	var gridAttrs = {
 		"id": "grid",
@@ -44,7 +45,7 @@ var createGrid = function(grid){
 			var x = j*(grid.width + grid.spacing);
 			var y = i*(grid.height + grid.spacing);
 			var new_rect = createSVGEl("rect");
-			var attrs = {"x":x, "y":y , "height": grid.width, "width": grid.width, "class":"empty" , "col": j, "row": i}
+			var attrs = { "x":x, "y":y , "height": grid.width, "width": grid.width, "class":"empty" , "col": j, "row": i, "xlink:href": "css/seattle.svg" }
 
 			setAttributes(new_rect, attrs)
 			addToSVG("grid", new_rect)
@@ -110,33 +111,74 @@ var createItemPanel = function(grid){
 		"id": "panel",
 		"transform": "translate(" + (x + grid.margin.left) + ", " + (y + grid.margin.top) + ")"
 	}
-
 	setAttributes(panelGroup, panelGroupAttrs);
-	addToSVG("game", panelGroup)
+	addToSVG("game", panelGroup);
 
-	var panelTitle = createSVGEl("text");
-	var panelTitleAttrs = {
-		x: 0,
-		y: 18
+
+
+	// Points tally
+	var panelPoints = createSVGEl("text"),
+		panelPointsAttrs = {
+			x: 0,
+			y: 18,
+			id: 'totalPts'
 	}
+	setAttributes(panelPoints, panelPointsAttrs)
+	addToSVG("panel", panelPoints);
 
-	$(panelTitle).text("Next item");
 
-	setAttributes(panelTitle, panelTitleAttrs)
-	addToSVG("panel", panelTitle)
 
-	var newItem = createSVGEl("rect");
-	var newItemAttrs = {
+	// Next item text
+	var panelPointsTitle = createSVGEl("text");
+	var panelPointsTitleAttrs = {
 		x: 0,
-		y: 40,
+		y: 68
+	}
+	$(panelPointsTitle).text("Next item");
+	setAttributes(panelPointsTitle, panelPointsTitleAttrs)
+	addToSVG("panel", panelPointsTitle);
+
+
+
+	// Next item box
+	var panelNewItem = createSVGEl("rect");
+	var panelNewItemAttrs = {
+		x: 0,
+		y: 90,
 		"id": "newItem",
 		width: grid.width,
 		height: grid.height,
 		"class": getItem()
 	}
+	setAttributes(panelNewItem, panelNewItemAttrs);
+	addToSVG("panel", panelNewItem);
 
-	setAttributes(newItem, newItemAttrs);
-	addToSVG("panel", newItem)
+
+
+	// // Storage text
+	// var panelStorageTitle = createSVGEl("text");
+	// var panelStorageTitleAttrs = {
+	// 	x: 0,
+	// 	y: 198
+	// }
+	// $(panelStorageTitle).text("Storage");
+	// setAttributes(panelStorageTitle, panelStorageTitleAttrs)
+	// addToSVG("panel", panelStorageTitle);
+
+
+
+	// // Storage box
+	// var panelStorageItem = createSVGEl("rect");
+	// var panelStorageItemAttrs = {
+	// 	x: 0,
+	// 	y: 220,
+	// 	"id": "storage",
+	// 	width: grid.width,
+	// 	height: grid.height,
+	// 	"class": "empty"
+	// }
+	// setAttributes(panelStorageItem, panelStorageItemAttrs);
+	// addToSVG("panel", panelStorageItem);
 }
 
 var createSVGEl = function(type){
@@ -181,7 +223,7 @@ var floodFill = function(node, replace_class, matches, checked) {
 }
 
 var checkGameOver = function() {
-	return ($("svg rect.empty").length == 0);
+	return ($("svg rect.empty:not(.panel)").length == 0);
 }
 
 var growItem = function(clickedBox, newClass){
@@ -193,12 +235,43 @@ var growItem = function(clickedBox, newClass){
 
 	if (matches.length >= 3) {
 		matches.forEach(function(match){
+			// add rect element at same location
+			// var new_rect = createSVGEl("rect");
+			// var attrs = {"x":match.attr('x'), "y":match.attr('y') , "height":60, "width":60, "class":"test"};
+			// setAttributes(new_rect, attrs);
+			// addToSVG("grid", new_rect);
+
 			match.attr('class','empty');
+
+			// animate new rect to clickedBox location
+			// new_rect.animate({left:60});
+			// move(new_rect);
+			// remove new rect
 		})
 		var nextClass = items.indexOf(newClass) + 1;
 		clickedBox.attr('class', items[nextClass]);
 		growItem(clickedBox, items[nextClass]);
 	}
+}
+
+function move(el) {
+	var left = 0;
+	function frame() {
+		left++;
+		el.style.left = left+'px';
+		if (left == 100) clearInterval(id);
+	}
+	var id = setInterval(frame,10);
+}
+
+function tallyPoints() {
+	var pts = 0;
+	$('svg rect:not(#newItem)').each(function(index,item){
+		if (item.getAttribute('class') != "empty") {
+			pts += points[item.getAttribute('class')];
+		}
+	});
+	return pts;
 }
 
 // initialize the game
@@ -207,6 +280,7 @@ $(document).ready(function(){
 	setupSVG(grid);
 	createGrid(grid);
 	createItemPanel(grid);
+	$('#totalPts').text("Score: "+tallyPoints());
 
 	// on click event
 	$('rect').click(function(event){
@@ -220,7 +294,10 @@ $(document).ready(function(){
 
 			// get next newItem
 			newItem.attr('class',getItem());
+			
+			$('#totalPts').text("Score: "+tallyPoints());
 
+			// check if game is over
 			if('is game over?',checkGameOver()) {
 				$('#gameOver').text("GAME OVER!");
 			}
